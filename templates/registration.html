@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Employee Registration</title>
+    <style>
+        /* Add CSS styles for your navigation bar here */
+        nav {
+            background-color: #333; /* Set the background color of the navigation bar */
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 10px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #fff; /* Set the text color for the navigation links */
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/registration">Registration</a>
+        <a href="/login">Login</a>
+        <a href="/dashboard">Dashboard</a>
+    </nav>
+    <h1>Employee Registration</h1>
+    <form action="/registration" method="POST">
+        <label for="emp_name">Full Name:</label>
+        <input type="text" name="emp_name" required><br><br>
+
+        <label for="emp_designation">Designation:</label>
+        <input type="text" name="emp_designation" required><br><br>
+
+        <label for="emp_dob">Date of Birth:</label>
+        <input type="date" name="emp_dob" required><br><br>
+
+        <label for="emp_mobile_no">Mobile Number:</label>
+        <input type="text" name="emp_mobile_no" required><br><br>
+
+        <label for="emp_email">Email:</label>
+        <input type="email" name="emp_email" required><br><br>
+
+        <label for="emp_password">Email:</label>
+        <input type="password" name="emp_password" required><br><br>
+
+        <input type="submit" value="Register">
+    </form>
+</body>
+</html>

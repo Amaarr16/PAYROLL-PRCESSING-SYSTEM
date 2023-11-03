@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Employee Login</title>
+    <style>
+        /* Add CSS styles for your navigation bar here */
+        nav {
+            background-color: #333; /* Set the background color of the navigation bar */
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 10px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #fff; /* Set the text color for the navigation links */
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/registration">Registration</a>
+        <a href="/login">Login</a>
+        <a href="/dashboard">Dashboard</a>
+    </nav>
+    <h1>Employee Login</h1>
+    <form action="/login" method="POST">
+        <label for="emp_email">Email:</label>
+        <input type="email" name="emp_email" required><br><br>
+
+        <label for="emp_password">Password:</label>
+        <input type="password" name="emp_password" required><br><br>
+
+        <input type="submit" value="Login">
+    </form>
+</body>
+</html>
