@@ -1,44 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <style>
-        /* Add CSS styles for your navigation bar here */
-        nav {
-            background-color: #333; /* Set the background color of the navigation bar */
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 10px;
-        }
-        nav a {
-            text-decoration: none;
-            color: #fff; /* Set the text color for the navigation links */
-            margin: 0 10px;
-        }
-        .active {
-            /* Define styles for the active link */
-            font-weight: bold;
-            text-decoration: underline;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <style>
+    /* Add CSS styles for your navigation bar here */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+    }
+
+    nav {
+      background-color: #333;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 10px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #fff;
+      margin: 0 15px;
+      font-weight: bold;
+    }
+
+    .active {
+      text-decoration: underline;
+    }
+
+    p {
+      text-align: center;
+      margin: 20px 0;
+      color: #333;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table th, table td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+
+    table th {
+      background-color: #333;
+      color: #fff;
+    }
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  </style>
 </head>
 <body>
-    <nav>
-        <a href="/">Home</a>
-        <a href="/registration">Registration</a>
-        <a href="/login">Login</a>
-        {% if 'user_id' in session %}
-            <a href="/dashboard" class="active">Dashboard</a>
-        {% else %}
-            <a href="/dashboard">Dashboard</a>
-        {% endif %}
-    </nav>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/registration">Registration</a>
+    <a href="/login">Login</a>
+    {% if 'user_id' in session %}
+      <a href="/dashboard" class="active">Dashboard</a>
+    {% else %}
+      <a href="/dashboard">Dashboard</a>
+    {% endif %}
+  </nav>
+  {% if 'user_id' in session %}
     <p>
-        Hi, there thankyou for joining. 
+      Hi, {{ employee.emp_name }}, welcome to the dashboard.
     </p>
+
+    <table>
+      <tr>
+        <th>Employee Name</th>
+        <th>Employer Name</th>
+        <th>Employer Logo</th>
+      </tr>
+      <tr>
+        <td>{{ employee.emp_name }}</td>
+        <td>{{ employee.employer }}</td>
+        <td><img src="{{ employee.employer_logo_url }}" alt="{{ employee.employer }} Logo"></td>
+      </tr>
+    </table>
+    <br><br>
+    <a href="{{ url_for('logout') }}">Logout</a>
+  {% else %}
+    <p>
+      Hi, please log in to access the dashboard.
+    </p>
+  {% endif %}
 </body>
 </html>

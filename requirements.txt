@@ -1,2 +1,3 @@
 Flask==2.1.1
-Flask-MySQL
+mysql-connector-python==8.0.27  # This is a MySQL connector for Python
+#FOR FULL WORKING RUN THIS COMMAND IN TERMINAL ==> pip install -r requirements.txt

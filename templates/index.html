@@ -5,29 +5,45 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        /* Add CSS styles for your navigation bar here */
-        nav {
-            background-color: #333; /* Set the background color of the navigation bar */
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 10px;
-        }
-        nav a {
-            text-decoration: none;
-            color: #fff; /* Set the text color for the navigation links */
-            margin: 0 10px;
-        }
-    </style>
-    <title>Document</title>
-</head>
-<body>
-    <nav>
+      /* Add CSS styles for your navigation bar here */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+      }
+  
+      nav {
+        background-color: #333;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 10px;
+      }
+  
+      nav a {
+        text-decoration: none;
+        color: #fff;
+        margin: 0 15px;
+        font-weight: bold;
+      }
+  
+      .active {
+        text-decoration: underline;
+      }  
+      </style>
+    </head>
+    <body>
+      <nav>
         <a href="/">Home</a>
         <a href="/registration">Registration</a>
         <a href="/login">Login</a>
-        <a href="/dashboard">Dashboard</a>
-    </nav>
+        {% if 'user_id' in session %}
+          <a href="/dashboard" class="active">Dashboard</a>
+        {% else %}
+          <a href="/dashboard">Dashboard</a>
+        {% endif %}
+      </nav>
 </body>
 </html>
 

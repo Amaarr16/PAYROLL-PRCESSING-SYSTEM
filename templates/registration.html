@@ -4,17 +4,75 @@
     <title>Employee Registration</title>
     <style>
         /* Add CSS styles for your navigation bar here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
         nav {
-            background-color: #333; /* Set the background color of the navigation bar */
+            background-color: #333;
             display: flex;
             justify-content: flex-end;
             align-items: center;
             padding: 10px;
         }
+
         nav a {
             text-decoration: none;
-            color: #fff; /* Set the text color for the navigation links */
-            margin: 0 10px;
+            color: #fff;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+
+        .active {
+            text-decoration: underline;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #333;
+        }
+
+        form {
+            background-color: #fff;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 50px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #555;
         }
     </style>
 </head>
@@ -23,27 +81,31 @@
         <a href="/">Home</a>
         <a href="/registration">Registration</a>
         <a href="/login">Login</a>
-        <a href="/dashboard">Dashboard</a>
+        {% if 'user_id' in session %}
+            <a href="/dashboard">Dashboard</a>
+        {% else %}
+            <a href="/dashboard">Dashboard</a>
+        {% endif %}
     </nav>
     <h1>Employee Registration</h1>
     <form action="/registration" method="POST">
         <label for="emp_name">Full Name:</label>
-        <input type="text" name="emp_name" required><br><br>
+        <input type="text" name="emp_name" required>
 
         <label for="emp_designation">Designation:</label>
-        <input type="text" name="emp_designation" required><br><br>
+        <input type="text" name="emp_designation" required>
 
         <label for="emp_dob">Date of Birth:</label>
-        <input type="date" name="emp_dob" required><br><br>
+        <input type="date" name="emp_dob" required>
 
         <label for="emp_mobile_no">Mobile Number:</label>
-        <input type="text" name="emp_mobile_no" required><br><br>
+        <input type="text" name="emp_mobile_no" required>
 
         <label for="emp_email">Email:</label>
-        <input type="email" name="emp_email" required><br><br>
+        <input type="email" name="emp_email" required>
 
-        <label for="emp_password">Email:</label>
-        <input type="password" name="emp_password" required><br><br>
+        <label for="emp_password">Password:</label>
+        <input type="password" name="emp_password" required>
 
         <input type="submit" value="Register">
     </form>
