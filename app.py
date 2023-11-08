@@ -50,8 +50,7 @@ def create_employee_table_if_not_exists():
             emp_mobile_no VARCHAR(15),
             emp_email VARCHAR(255),
             emp_password VARCHAR(255),
-            employer VARCHAR(255),
-            employer_logo_url VARCHAR(255)
+            employer VARCHAR(255)
         )
         """)
         connection.commit()
@@ -62,10 +61,12 @@ def create_employee_table_if_not_exists():
 
 create_employee_table_if_not_exists()
 
+#FUNCTION FOR INDEX PAGE
 @app.route('/')
 def index():
     return render_template('index.html')
 
+#FUNCTION FOR REGISTRATION PAGE
 @app.route('/registration', methods=['GET', 'POST'])
 def registration():
     if request.method == 'POST':
@@ -76,12 +77,12 @@ def registration():
         emp_email = request.form['emp_email']
         emp_password = request.form['emp_password']
         employer='Payroll Processing System'
-        employer_logo_url='PAYROLL-IMG.jpg'
+        #employer_logo_url='PAYROLL-IMG.jpg'
         connection = get_mysql_connection()
         cursor = connection.cursor()
         cursor.execute(
-            "INSERT INTO employee (emp_name, emp_designation, emp_dob, emp_mobile_no, emp_email, emp_password, employer, employer_logo_url) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
-            (emp_name, emp_designation, emp_dob, emp_mobile_no, emp_email, emp_password, employer, employer_logo_url)
+            "INSERT INTO employee (emp_name, emp_designation, emp_dob, emp_mobile_no, emp_email, emp_password, employer) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+            (emp_name, emp_designation, emp_dob, emp_mobile_no, emp_email, emp_password, employer)
             )
         connection.commit()
         cursor.close()
@@ -89,6 +90,7 @@ def registration():
         return redirect(url_for('index'))
     return render_template('registration.html')
 
+#FUNCTION FOR LOGIN PAGE
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -105,7 +107,8 @@ def login():
             flash('Invalid email or password. Please try again.', 'error')
     return render_template('login.html')
 
-@app.route('/dashboard')
+#FUNCTION FOR DASHBORD PAGE
+@app.route('/dashboard') 
 def dashboard():
     if 'user_id' in session:
         connection = get_mysql_connection()
@@ -114,13 +117,14 @@ def dashboard():
         employee = cursor.fetchone()
         connection.close()
         if employee:
-            employer_logo_url = employee.get('employer_logo_url', '')
-            return render_template('dashboard.html', employee=employee, employer_logo_url=employer_logo_url)
+            #employer_logo_url = employee.get('employer_logo_url', '')
+            return render_template('dashboard.html', employee=employee)#, employer_logo_url=employer_logo_url)
         else:
             return "Employee not found"
     else:
         return redirect(url_for('login'))
 
+#FUNCTION FOR LOGOUT PAGE
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)  # Remove the user_id from the session
