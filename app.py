@@ -1,65 +1,24 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask_bcrypt import Bcrypt  # Add Flask-Bcrypt for password hashing
 import os
 import mysql.connector
+from database import get_mysql_connection, create_database_if_not_exists, create_employee_table_if_not_exists
+from dotenv import load_dotenv
+
+load_dotenv()  # Load environment variables from .env file
 
 app = Flask(__name__)
-
+bcrypt = Bcrypt(app)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY') or 'a_secure_random_key_here'
-
 # Configure MySQL
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'Psatpsat'
-app.config['MYSQL_DB'] = 'payroll_processing'  # Use the name of your database
+app.config['MYSQL_HOST'] = os.environ.get('MYSQL_HOST', 'localhost')
+app.config['MYSQL_USER'] = os.environ.get('MYSQL_USER', 'root')
+app.config['MYSQL_PASSWORD'] = os.environ.get('MYSQL_PASSWORD', 'Psatpsat')
+app.config['MYSQL_DB'] = os.environ.get('MYSQL_DB', 'payroll_processing_system')
 
-def get_mysql_connection():
-    return mysql.connector.connect(
-        host=app.config['MYSQL_HOST'],
-        user=app.config['MYSQL_USER'],
-        password=app.config['MYSQL_PASSWORD'],
-        database=app.config['MYSQL_DB']
-    )
-
-def create_database_if_not_exists():
-    try:
-        connection = mysql.connector.connect(
-            host=app.config['MYSQL_HOST'],
-            user=app.config['MYSQL_USER'],
-            password=app.config['MYSQL_PASSWORD']
-        )
-        cursor = connection.cursor()
-        cursor.execute("CREATE DATABASE IF NOT EXISTS payroll_processing")
-        cursor.close()
-        connection.close()
-    except Exception as e:
-        print(f"Error creating the database: {e}")
-
-create_database_if_not_exists()
-
-def create_employee_table_if_not_exists():
-    try:
-        connection = get_mysql_connection()
-        cursor = connection.cursor()
-
-        cursor.execute("""
-        CREATE TABLE IF NOT EXISTS employee (
-            emp_id INT AUTO_INCREMENT PRIMARY KEY,
-            emp_name VARCHAR(255),
-            emp_designation VARCHAR(255),
-            emp_dob DATE,
-            emp_mobile_no VARCHAR(15),
-            emp_email VARCHAR(255),
-            emp_password VARCHAR(255),
-            employer VARCHAR(255)
-        )
-        """)
-        connection.commit()
-        cursor.close()
-        connection.close()
-    except Exception as e:
-        print(f"Error creating 'employee' table: {e}")
-
-create_employee_table_if_not_exists()
+get_mysql_connection(app)
+create_database_if_not_exists(app)
+create_employee_table_if_not_exists(app)
 
 #FUNCTION FOR INDEX PAGE
 @app.route('/')
@@ -75,7 +34,7 @@ def registration():
         emp_dob = request.form['emp_dob']
         emp_mobile_no = request.form['emp_mobile_no']
         emp_email = request.form['emp_email']
-        emp_password = request.form['emp_password']
+        emp_password = bcrypt.generate_password_hash(request.form['emp_password']).decode('utf-8')
         employer='Payroll Processing System'
         #employer_logo_url='PAYROLL-IMG.jpg'
         connection = get_mysql_connection()
@@ -100,7 +59,7 @@ def login():
         cursor = connection.cursor(dictionary=True)
         cursor.execute("SELECT * FROM employee WHERE emp_email = %s", (emp_email,))
         user = cursor.fetchone()
-        if user and user['emp_password'] == emp_password:
+        if user and bcrypt.check_password_hash(user['emp_password'], emp_password):
             session['user_id'] = user['emp_id']
             return redirect(url_for('dashboard'))
         else:

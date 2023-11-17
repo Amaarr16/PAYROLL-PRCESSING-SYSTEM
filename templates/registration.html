@@ -82,15 +82,16 @@
         <a href="/registration">Registration</a>
         <a href="/login">Login</a>
         {% if 'user_id' in session %}
-            <a href="/dashboard">Dashboard</a>
+        <a href="/dashboard" class="active">Dashboard</a>
         {% else %}
             <a href="/dashboard">Dashboard</a>
         {% endif %}
     </nav>
     <h1>Employee Registration</h1>
     <form action="/registration" method="POST">
+        
         <label for="emp_name">Full Name:</label>
-        <input type="text" name="emp_name" required>
+        <input type="text" name="emp_name" id="emp_name" required aria-label="Full Name">
 
         <label for="emp_designation">Designation:</label>
         <input type="text" name="emp_designation" required>
