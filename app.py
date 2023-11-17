@@ -2,7 +2,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
-from database import get_mysql_connection, create_database_if_not_exists, create_employee_table_if_not_exists
+from database import create_attendance_table_if_not_exists, create_leave_table_if_not_exists, create_pays_table_if_not_exists, create_salary_calculation_table_if_not_exists, get_mysql_connection, create_database_if_not_exists, create_employee_table_if_not_exists
 from dotenv import load_dotenv
 
 load_dotenv()  # Load environment variables from .env file
@@ -91,4 +91,8 @@ if __name__ == '__main__':
     get_mysql_connection(app)
     create_database_if_not_exists(app)
     create_employee_table_if_not_exists(app)
+    create_attendance_table_if_not_exists(app)
+    create_leave_table_if_not_exists(app)
+    create_salary_calculation_table_if_not_exists(app)
+    create_pays_table_if_not_exists(app)
     app.run(debug=True)

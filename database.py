@@ -46,3 +46,84 @@ def create_employee_table_if_not_exists(app):
         connection.close()
     except Exception as e:
         print(f"Error creating 'employee' table: {e}")
+
+
+def create_attendance_table_if_not_exists(app):
+    try:
+        connection = get_mysql_connection(app)
+        cursor = connection.cursor()
+
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS Attendance (
+            emp_id INT,
+            present_days INT,
+            absent_days INT,
+            FOREIGN KEY (emp_id) REFERENCES Employee(emp_id)
+        )
+        """)
+        connection.commit()
+        cursor.close()
+        connection.close()
+    except Exception as e:
+        print(f"Error creating 'attendance' table: {e}")
+
+def create_leave_table_if_not_exists(app):
+    try:
+        connection = get_mysql_connection(app)
+        cursor = connection.cursor()
+
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS Leave (
+            emp_id INT,
+            leave_type ENUM('Sick Leave', 'Casual Leave', 'Vacation Leave'),
+            number_of_days INT,
+            FOREIGN KEY (emp_id) REFERENCES Employee(emp_id)
+        )
+        """)
+        connection.commit()
+        cursor.close()
+        connection.close()
+    except Exception as e:
+        print(f"Error creating 'leave' table: {e}")
+
+def create_salary_calculation_table_if_not_exists(app):
+    try:
+        connection = get_mysql_connection(app)
+        cursor = connection.cursor()
+
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS SalaryCalculation (
+            emp_id INT,
+            hra DECIMAL(10,2),
+            da DECIMAL(10,2),
+            ba DECIMAL(10,2),
+            ta DECIMAL(10,2),
+            incentive DECIMAL(10,2),
+            total_salary DECIMAL(10,2),
+            FOREIGN KEY (emp_id) REFERENCES Employee(emp_id)
+        )
+        """)
+        connection.commit()
+        cursor.close()
+        connection.close()
+    except Exception as e:
+        print(f"Error creating 'salary_calculation' table: {e}")
+
+def create_pays_table_if_not_exists(app):
+    try:
+        connection = get_mysql_connection(app)
+        cursor = connection.cursor()
+
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS Pays (
+            emp_id INT,
+            payment_amount DECIMAL(10,2),
+            payment_date DATE,
+            FOREIGN KEY (emp_id) REFERENCES Employee(emp_id)
+        )
+        """)
+        connection.commit()
+        cursor.close()
+        connection.close()
+    except Exception as e:
+        print(f"Error creating 'pays' table: {e}")
