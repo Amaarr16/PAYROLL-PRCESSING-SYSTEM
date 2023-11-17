@@ -1,7 +1,7 @@
 # database.py
+from flask import Flask
 import mysql.connector
-from flask_bcrypt import Bcrypt
-
+app = Flask(__name__)
 def get_mysql_connection(app):
     return mysql.connector.connect(
         host=app.config['MYSQL_HOST'],

@@ -1,5 +1,12 @@
 #This file specifies the exact versions of Flask, MySQL Connector, and Flask-Bcrypt that your project requires. 
-#You can use the "pip install -r requirements.txt" command to install all the dependencies listed in this file.
+#You can use the 
+#"pip install -r requirements.txt" command to install all the dependencies listed in this file.
 Flask==2.1.1
 mysql-connector-python==8.0.27  # This is a MySQL connector for Python
-Flask-Bcrypt==0.7.1
+Werkzeug==2.1.2
+#Open your terminal.
+#Run the following commands to generate the secure random key:
+#python -c "import os; import secrets; print(f'Secure Random Key: {secrets.token_hex(16)}')"
+#This one-liner will print the generated key to the terminal.
+#Copy the generated key.
+#Open your .env file, and set the FLASK_SECRET_KEY to the copied key:
