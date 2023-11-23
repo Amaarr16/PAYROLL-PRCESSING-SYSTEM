@@ -1,12 +1,12 @@
-
+from database import create_attendance_table_if_not_exists, create_leave_table_if_not_exists, create_pays_table_if_not_exists, create_salary_calculation_table_if_not_exists, get_mysql_connection, create_database_if_not_exists, create_employee_table_if_not_exists
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
-import os
-from database import create_attendance_table_if_not_exists, create_leave_table_if_not_exists, create_pays_table_if_not_exists, create_salary_calculation_table_if_not_exists, get_mysql_connection, create_database_if_not_exists, create_employee_table_if_not_exists
 from dotenv import load_dotenv
+import os
 
 load_dotenv()  # Load environment variables from .env file
 #print(os.environ)
+
 app = Flask(__name__)
 
 app.secret_key = os.environ.get('FLASK_SECRET_KEY') or 'a_secure_random_key_here'
@@ -22,6 +22,7 @@ create_salary_calculation_table_if_not_exists(app)
 create_pays_table_if_not_exists(app)
 create_attendance_table_if_not_exists(app)
 create_leave_table_if_not_exists(app)
+
 #FUNCTION FOR INDEX PAGE
 @app.route('/')
 def index():
@@ -136,7 +137,7 @@ def dashboard():
         connection.close()
         if employee:
             #employer_logo_url = employee.get('employer_logo_url', '')
-            return render_template('dashboard.html', employee=employee)#, employer_logo_url=employer_logo_url)
+            return render_template('dashboard.html', employee=employee) #, employer_logo_url=employer_logo_url)
         else:
             return "Employee not found"
     else:
