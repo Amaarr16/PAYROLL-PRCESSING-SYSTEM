@@ -39,7 +39,7 @@
         <a href="/registration">Registration</a>
         <a href="/login">Login</a>
         {% if 'user_id' in session %}
-          <a href="/dashboard" class="active">Dashboard</a>
+          <a href="/dashboard" class="{% if request.path == '/dashboard' %}active{% endif %}">Dashboard</a>
         {% else %}
           <a href="/dashboard">Dashboard</a>
         {% endif %}

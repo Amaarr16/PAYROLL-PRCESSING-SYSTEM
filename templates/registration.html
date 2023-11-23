@@ -82,7 +82,7 @@
         <a href="/registration">Registration</a>
         <a href="/login">Login</a>
         {% if 'user_id' in session %}
-        <a href="/dashboard" class="active">Dashboard</a>
+            <a href="/dashboard" class="{% if request.path == '/dashboard' %}active{% endif %}">Dashboard</a>
         {% else %}
             <a href="/dashboard">Dashboard</a>
         {% endif %}
@@ -90,14 +90,20 @@
     <h1>Employee Registration</h1>
     <form action="/registration" method="POST">
         
-        <label for="emp_name">Full Name:</label>
-        <input type="text" name="emp_name" id="emp_name" required aria-label="Full Name">
+        <label for="f_name">First Name:</label>
+        <input type="text" name="f_name" id="emp_name" required aria-label="First Name" aria-placeholder="First Name">
 
-        <label for="emp_designation">Designation:</label>
-        <input type="text" name="emp_designation" required>
+        <label for="m_name">Middle Name:</label>
+        <input type="text" name="m_name" id="emp_name" required aria-label="Middle Name" aria-placeholder="Middle Name">
+
+        <label for="l_name">Last Name:</label>
+        <input type="text" name="l_name" id="emp_name" required aria-label="Last Name" aria-placeholder="Last Name">
+
+        <label for="emp_desig">Designation:</label>
+        <input type="text" name="emp_desig" required aria-label="Designation" aria-placeholder="Designation">
 
         <label for="emp_dob">Date of Birth:</label>
-        <input type="date" name="emp_dob" required>
+        <input type="date" name="emp_dob" required aria-label="Date of Birth" aria-placeholder="Date of Birth">
 
         <label for="emp_mobile_no">Mobile Number:</label>
         <input type="text" name="emp_mobile_no" required>
@@ -105,8 +111,17 @@
         <label for="emp_email">Email:</label>
         <input type="email" name="emp_email" required>
 
+        <label for="acc_name">Account Name:</label>
+        <input type="text" name="acc_name" id="acc_name" required aria-label="Account Name">
+
+        <label for="acc_number">Account No:</label>
+        <input type="text" name="acc_number" id="acc_number" required aria-label="Account Number">
+
+        <label for="ifsc_code">IFSC Code:</label>
+        <input type="text" name="ifsc_code" id="ifsc_code" required aria-label="IFSC Code">
+
         <label for="emp_password">Password:</label>
-        <input type="password" name="emp_password" required>
+        <input type="password" name="emp_password" required aria-label="Password">
 
         <input type="submit" value="Register">
     </form>

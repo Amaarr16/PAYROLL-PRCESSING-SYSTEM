@@ -63,7 +63,7 @@
     <a href="/registration">Registration</a>
     <a href="/login">Login</a>
     {% if 'user_id' in session %}
-      <a href="/dashboard" class="active">Dashboard</a>
+      <a href="/dashboard" class="{% if request.path == '/dashboard' %}active{% endif %}">Dashboard</a>
     {% else %}
       <a href="/dashboard">Dashboard</a>
     {% endif %}
@@ -77,11 +77,13 @@
       <tr>
         <th>Employee Name</th>
         <th>Employer Name</th>
+        <th>Verification Status</th>
         <!--<th>Employer Logo</th>-->
       </tr>
       <tr>
-        <td>{{ employee.emp_name }}</td>
+        <td>{{ employee.f_name }} {{ employee.m_name }} {{ employee.l_name }}</td>
         <td>{{ employee.employer }}</td>
+        <td>{{ employee.verification_status }}</td>
         <!--<td><img src="{{ employee.employer_logo_url }}" alt="{{ employee.employer }} Logo"></td>-->
       </tr>
     </table>

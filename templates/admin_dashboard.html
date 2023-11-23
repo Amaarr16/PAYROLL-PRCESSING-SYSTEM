@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        /* Add your styles here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        nav {
+            background-color: #333;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 10px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+
+        .active {
+            text-decoration: underline;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #333;
+        }
+
+        table {
+            width: 100%; /* Set the width to 100% */
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #333;
+            color: #fff;
+        }
+
+        table td button {
+            background-color: #333;
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        table td button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/registration">Registration</a>
+        <a href="/login">Login</a>
+        {% if 'user_id' in session %}
+          <a href="/dashboard" class="{% if request.path == '/dashboard' %}active{% endif %}">Dashboard</a>
+        {% else %}
+          <a href="/dashboard">Dashboard</a>
+        {% endif %}
+      </nav>
+    <h1>Admin Dashboard</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Employee ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Verification Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in employees %}
+            <tr>
+                <td>{{ employee.emp_id }}</td>
+                <td>{{ employee.f_name }} {{ employee.m_name }} {{ employee.l_name }}</td>
+                <td>{{ employee.emp_email }}</td>
+                <td>{{ employee.verification_status }}</td>
+                <td>
+                    <form method="post"
+                        action="{{ url_for('admin_update_verification', emp_id=employee['emp_id']) }}">
+                        <select name="verification_status">
+                            <option value="Pending"
+                                {% if employee['verification_status'] == 'Pending' %} selected {% endif %}>
+                                Pending
+                            </option>
+                            <option value="Verified"
+                                {% if employee['verification_status'] == 'Verified' %} selected {% endif %}>
+                                Verified
+                            </option>
+                            <option value="Rejected"
+                                {% if employee['verification_status'] == 'Rejected' %} selected {% endif %}>
+                                Rejected
+                            </option>
+                        </select>
+                        <button type="submit">Update</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ url_for('logout') }}">Logout</a>
+</body>
+</html>
