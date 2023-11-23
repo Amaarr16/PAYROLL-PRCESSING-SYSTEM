@@ -1,4 +1,5 @@
-# database.py
+# database.py (for database related functionalities)
+
 from flask import Flask
 import mysql.connector
 app = Flask(__name__)
@@ -142,3 +143,14 @@ def create_pays_table_if_not_exists(app):
         connection.close()
     except Exception as e:
         print(f"Error creating 'pays' table: {e}")
+
+# Other table creation functions...
+
+def create_all_tables(app):
+    # Function to create all tables
+    create_database_if_not_exists(app)
+    create_employee_table_if_not_exists(app)
+    create_attendance_table_if_not_exists(app)
+    create_leave_table_if_not_exists(app)
+    create_salary_calculation_table_if_not_exists(app)
+    create_pays_table_if_not_exists(app)

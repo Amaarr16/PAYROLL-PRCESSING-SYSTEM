@@ -33,7 +33,7 @@
             text-decoration: underline;
         }
 
-        h1 {
+        h1,h2 {
             text-align: center;
             margin: 20px 0;
             color: #333;
@@ -82,8 +82,8 @@
           <a href="/dashboard">Dashboard</a>
         {% endif %}
       </nav>
+    
     <h1>Admin Dashboard</h1>
-
     <table>
         <thead>
             <tr>
@@ -125,7 +125,100 @@
             {% endfor %}
         </tbody>
     </table>
+    
+    <h2>Attendance Table</h2>
+    <!-- Render Attendance table data here -->
+    <table>
+        <thead>
+            <tr>
+                <th>Employee ID</th>
+                <th>Present Days</th>
+                <th>Absent Days</th>
+                <!-- Include other table headers based on your Attendance table -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for attendance_record in attendance_data %}
+            <tr>
+                <td>{{ attendance_record.emp_id }}</td>
+                <td>{{ attendance_record.present_days }}</td>
+                <td>{{ attendance_record.absent_days }}</td>
+                <!-- Include other data points based on your Attendance table -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <h2>Leave Table</h2>
+    <!-- Render Leave table data here -->
+    <table>
+        <thead>
+            <tr>
+                <th>Employee ID</th>
+                <th>Leave Type</th>
+                <th>Number of Days</th>
+                <!-- Include other table headers based on your Leave table -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for leave_record in leave_data %}
+            <tr>
+                <td>{{ leave_record.emp_id }}</td>
+                <td>{{ leave_record.leave_type }}</td>
+                <td>{{ leave_record.number_of_days }}</td>
+                <!-- Include other data points based on your Leave table -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <h2>Salary Calculation Table</h2>
+    <!-- Render Salary Calculation table data here -->
+    <table>
+        <thead>
+            <tr>
+                <th>Employee ID</th>
+                <th>HRA</th>
+                <th>DA</th>
+                <!-- Include other table headers based on your Salary Calculation table -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for salary_record in salary_data %}
+            <tr>
+                <td>{{ salary_record.emp_id }}</td>
+                <td>{{ salary_record.hra }}</td>
+                <td>{{ salary_record.da }}</td>
+                <!-- Include other data points based on your Salary Calculation table -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <h2>Pays Table</h2>
+    <!-- Render Pays table data here -->
+    <table>
+        <thead>
+            <tr>
+                <th>Employee ID</th>
+                <th>Payment Amount</th>
+                <th>Payment Date</th>
+                <!-- Include other table headers based on your Pays table -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for pays_record in pays_data %}
+            <tr>
+                <td>{{ pays_record.emp_id }}</td>
+                <td>{{ pays_record.payment_amount }}</td>
+                <td>{{ pays_record.payment_date }}</td>
+                <!-- Include other data points based on your Pays table -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-    <a href="{{ url_for('logout') }}">Logout</a>
+    <br /><br />
+    <button><a href="{{ url_for('logout') }}">Logout</a></button>
 </body>
 </html>

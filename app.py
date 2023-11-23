@@ -1,6 +1,7 @@
-from database import create_attendance_table_if_not_exists, create_leave_table_if_not_exists, create_pays_table_if_not_exists, create_salary_calculation_table_if_not_exists, get_mysql_connection, create_database_if_not_exists, create_employee_table_if_not_exists
+from database import get_mysql_connection, create_database_if_not_exists, create_all_tables
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
+from data_fetch import fetch_all_data
 from dotenv import load_dotenv
 import os
 
@@ -17,11 +18,9 @@ app.config['MYSQL_PASSWORD'] = os.environ.get('MYSQL_PASSWORD', 'Psatpsat')
 app.config['MYSQL_DB'] = os.environ.get('MYSQL_DB', 'payroll_processing_system')
 
 create_database_if_not_exists(app)
-create_employee_table_if_not_exists(app)
-create_salary_calculation_table_if_not_exists(app)
-create_pays_table_if_not_exists(app)
-create_attendance_table_if_not_exists(app)
-create_leave_table_if_not_exists(app)
+# Ensure database tables are created when the app starts
+with app.app_context():
+    create_all_tables(app)
 
 #FUNCTION FOR INDEX PAGE
 @app.route('/')
@@ -97,8 +96,8 @@ def get_all_employees():
 @app.route('/admin_dashboard')
 def admin_dashboard():
     if 'user_id' in session and session['user_id'] == 1:  # Replace '1' with the ID of your admin user
-        employees = get_all_employees()
-        return render_template('admin_dashboard.html', employees=employees)
+        all_data = fetch_all_data(app)
+        return render_template('admin_dashboard.html', employees=all_data['employee_data'],attendance_data=all_data['attendance_data'] ,leave_data=all_data['leave_data'],salary_data=all_data['salary_data'],pays_data=all_data['pays_data'])
     else:
         return redirect(url_for('login'))
 
@@ -150,4 +149,7 @@ def logout():
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
+    # Call create_all_tables function within the app context
+    with app.app_context():
+        create_all_tables(app)
     app.run(debug=True)
