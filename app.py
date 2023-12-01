@@ -1,10 +1,10 @@
-from database import get_mysql_connection, create_database_if_not_exists, create_all_tables
+from database import get_mysql_connection, create_all_tables
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
-from data_fetch import fetch_all_data
+import mysql.connector
 from dotenv import load_dotenv
 import os
-
+from data_fetch import fetch_all_data
 load_dotenv()  # Load environment variables from .env file
 #print(os.environ)
 
@@ -17,7 +17,8 @@ app.config['MYSQL_USER'] = os.environ.get('MYSQL_USER', 'root')
 app.config['MYSQL_PASSWORD'] = os.environ.get('MYSQL_PASSWORD', 'Psatpsat')
 app.config['MYSQL_DB'] = os.environ.get('MYSQL_DB', 'payroll_processing_system')
 
-create_database_if_not_exists(app)
+
+
 # Ensure database tables are created when the app starts
 with app.app_context():
     create_all_tables(app)
@@ -41,15 +42,16 @@ def registration():
         acc_name = request.form['acc_name']
         acc_number = request.form['acc_number']
         ifsc_code = request.form['ifsc_code']
+        emp_ver_id=request.form['emp_ver_id']
         emp_password = generate_password_hash(request.form['emp_password'], method='pbkdf2:sha1')
         # Assuming you're the first member registering as an admin
-        oth_emp_id_value = '0'  # For example, using None for absence of another employee ID
+        oth_emp_id_value = '1'  # For example, using None for absence of another employee ID
         #employer_logo_url='PAYROLL-IMG.jpg'
         connection = get_mysql_connection(app)
         cursor = connection.cursor()
         cursor.execute(
-            "INSERT INTO Employee (f_name, m_name, l_name, emp_designation, emp_dob, emp_mobile_no, emp_email, acc_name, acc_number, ifsc_code, emp_password, verification_status, oth_emp_id, employer) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-            (f_name, m_name, l_name, emp_designation, emp_dob, emp_mobile_no, emp_email, acc_name, acc_number, ifsc_code, emp_password, 'Pending', oth_emp_id_value, 'Payroll Processing System')
+            "INSERT INTO Employee (f_name, m_name, l_name, emp_designation, emp_dob, emp_mobile_no, emp_email, acc_name, acc_number, ifsc_code, emp_ver_id, emp_password, verification_status, oth_emp_id, employer) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            (f_name, m_name, l_name, emp_designation, emp_dob, emp_mobile_no, emp_email, acc_name, acc_number, ifsc_code, emp_ver_id, emp_password, 'Pending', oth_emp_id_value, 'Payroll Processing System')
             )
         connection.commit()
         cursor.close()
@@ -81,15 +83,12 @@ def login():
 def get_all_employees():
     connection = get_mysql_connection(app)
     cursor = connection.cursor(dictionary=True)
-
     cursor.execute("""
         SELECT emp_id, f_name, m_name, l_name, emp_email, verification_status
         FROM Employee
     """)
-
     employees = cursor.fetchall()
     connection.close()
-
     return employees
 
 # Admin dashboard route
@@ -97,7 +96,7 @@ def get_all_employees():
 def admin_dashboard():
     if 'user_id' in session and session['user_id'] == 1:  # Replace '1' with the ID of your admin user
         all_data = fetch_all_data(app)
-        return render_template('admin_dashboard.html', employees=all_data['employee_data'],attendance_data=all_data['attendance_data'] ,leave_data=all_data['leave_data'],salary_data=all_data['salary_data'],pays_data=all_data['pays_data'])
+        return render_template('admin_dashboard.html', employees=all_data['employee_data'],attendance_data=all_data['attendance_data'] ,leave_data=all_data['leave_data'],salary_data=all_data['salary_data'],employer_data=all_data['employer_data'])
     else:
         return redirect(url_for('login'))
 
@@ -107,7 +106,6 @@ def admin_update_verification(emp_id):
     if 'user_id' in session and session['user_id'] == 1:
         if request.method == 'POST':
             verification_status = request.form['verification_status']
-
             connection = get_mysql_connection(app)
             cursor = connection.cursor()
             cursor.execute("""
@@ -115,14 +113,11 @@ def admin_update_verification(emp_id):
                 SET verification_status = %s
                 WHERE emp_id = %s
             """, (verification_status, emp_id))
-
             connection.commit()
             cursor.close()
             connection.close()
-
             flash('Employee verification status updated successfully.')
             return redirect(url_for('admin_dashboard'))
-
     return redirect(url_for('login'))
 
 #FUNCTION FOR DASHBORD PAGE

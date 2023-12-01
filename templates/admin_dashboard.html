@@ -81,8 +81,7 @@
         {% else %}
           <a href="/dashboard">Dashboard</a>
         {% endif %}
-      </nav>
-    
+    </nav>
     <h1>Admin Dashboard</h1>
     <table>
         <thead>
@@ -195,23 +194,23 @@
         </tbody>
     </table>
     
-    <h2>Pays Table</h2>
+    <h2>Employer Table</h2>
     <!-- Render Pays table data here -->
     <table>
         <thead>
             <tr>
-                <th>Employee ID</th>
-                <th>Payment Amount</th>
-                <th>Payment Date</th>
+                <th>Employer ID</th>
+                <th>Designation</th>
+                <th>Department</th>
                 <!-- Include other table headers based on your Pays table -->
             </tr>
         </thead>
         <tbody>
-            {% for pays_record in pays_data %}
+            {% for employer_record in employer_data %}
             <tr>
-                <td>{{ pays_record.emp_id }}</td>
-                <td>{{ pays_record.payment_amount }}</td>
-                <td>{{ pays_record.payment_date }}</td>
+                <td>{{ employer_record.empl_id }}</td>
+                <td>{{ employer_record.empl_desg }}</td>
+                <td>{{ employer_record.empl_depart }}</td>
                 <!-- Include other data points based on your Pays table -->
             </tr>
             {% endfor %}

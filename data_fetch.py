@@ -3,10 +3,9 @@ from flask import Flask
 from database import get_mysql_connection
 from dotenv import load_dotenv
 import os
-
+import mysql.connector
 load_dotenv()  # Load environment variables from .env file
 app = Flask(__name__)
-
 app.config['MYSQL_HOST'] = os.environ.get('MYSQL_HOST', 'localhost')
 app.config['MYSQL_USER'] = os.environ.get('MYSQL_USER', 'root')
 app.config['MYSQL_PASSWORD'] = os.environ.get('MYSQL_PASSWORD', 'Psatpsat')
@@ -47,27 +46,27 @@ def fetch_salary_calculation_data(app):
     connection.close()
     return salary_calculations
 
-def fetch_pays_data(app):
+def fetch_employer_data(app):
     connection = get_mysql_connection(app)
     cursor = connection.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM Pays")
-    pays = cursor.fetchall()
+    cursor.execute("SELECT * FROM Employer")
+    employers = cursor.fetchall()
     connection.close()
-    return pays
+    return employers
 
 def fetch_all_data(app):
     employee_data = fetch_employee_data(app)
     attendance_data = fetch_attendance_data(app)
     leave_data = fetch_leave_data(app)
     salary_data = fetch_salary_calculation_data(app)
-    pays_data = fetch_pays_data(app)
+    employer_data = fetch_employer_data(app)
     # Fetch data for other tables similarly
     all_data = {
         'employee_data': employee_data,
         'attendance_data': attendance_data,
         'leave_data': leave_data,
         'salary_data':salary_data,
-        'pays_data':pays_data
+        'employer_data':employer_data
         # Include other table data similarly in the dictionary
         # Other tables similarly
     }
