@@ -3,7 +3,6 @@ from flask import Flask
 from database import get_mysql_connection
 from dotenv import load_dotenv
 import os
-import mysql.connector
 load_dotenv()  # Load environment variables from .env file
 app = Flask(__name__)
 app.config['MYSQL_HOST'] = os.environ.get('MYSQL_HOST', 'localhost')

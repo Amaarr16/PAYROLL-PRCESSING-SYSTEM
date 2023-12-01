@@ -82,58 +82,71 @@
           <a href="/dashboard">Dashboard</a>
         {% endif %}
     </nav>
-    <h1>Admin Dashboard</h1>
+<h1>Admin Dashboard</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Employee ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Verification Status</th>
+            <th>Action</th>
+            <th>Present Days</th>
+            <th>Absent Days</th>
+            <th>Leave Type</th>
+            <th>Number of Days</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for employee in employees %}
+        {% for attendance_record in attendance_data %}
+        {% for leave_record in leave_data %}
+        {% if employee.emp_id == attendance_record.emp_id %}
+        {% if employee.emp_id == leave_record.emp_id %}
+        <tr>
+            <td>{{ employee.emp_id }}</td>
+            <td>{{ employee.f_name }} {{ employee.m_name }} {{ employee.l_name }}</td>
+            <td>{{ employee.emp_email }}</td>
+            <td>{{ employee.verification_status }}</td>
+            <td>
+                <form method="post"
+                    action="{{ url_for('admin_update_verification', emp_id=employee['emp_id']) }}">
+                    <select name="verification_status">
+                        <option value="Pending"
+                            {% if employee['verification_status'] == 'Pending' %} selected {% endif %}>
+                            Pending
+                        </option>
+                        <option value="Verified"
+                            {% if employee['verification_status'] == 'Verified' %} selected {% endif %}>
+                            Verified
+                        </option>
+                        <option value="Rejected"
+                            {% if employee['verification_status'] == 'Rejected' %} selected {% endif %}>
+                            Rejected
+                        </option>
+                    </select>
+                    <button type="submit">Update</button>
+                </form>
+            </td>
+            <td>{{ attendance_record.present_days }}</td>
+            <td>{{ attendance_record.absent_days }}</td>
+            <td>{{ leave_record.leave_type }}</td>
+            <td>{{ leave_record.number_of_days }}</td>
+        </tr>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+        {% endfor %}
+    </tbody>
+</table>
+    <!-- <h2>Attendance Table</h2>
+    Render Attendance table data here
     <table>
         <thead>
             <tr>
                 <th>Employee ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Verification Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for employee in employees %}
-            <tr>
-                <td>{{ employee.emp_id }}</td>
-                <td>{{ employee.f_name }} {{ employee.m_name }} {{ employee.l_name }}</td>
-                <td>{{ employee.emp_email }}</td>
-                <td>{{ employee.verification_status }}</td>
-                <td>
-                    <form method="post"
-                        action="{{ url_for('admin_update_verification', emp_id=employee['emp_id']) }}">
-                        <select name="verification_status">
-                            <option value="Pending"
-                                {% if employee['verification_status'] == 'Pending' %} selected {% endif %}>
-                                Pending
-                            </option>
-                            <option value="Verified"
-                                {% if employee['verification_status'] == 'Verified' %} selected {% endif %}>
-                                Verified
-                            </option>
-                            <option value="Rejected"
-                                {% if employee['verification_status'] == 'Rejected' %} selected {% endif %}>
-                                Rejected
-                            </option>
-                        </select>
-                        <button type="submit">Update</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    
-    <h2>Attendance Table</h2>
-    <!-- Render Attendance table data here -->
-    <table>
-        <thead>
-            <tr>
-                <th>Employee ID</th>
-                <th>Present Days</th>
-                <th>Absent Days</th>
-                <!-- Include other table headers based on your Attendance table -->
+                Include other table headers based on your Attendance tabl
             </tr>
         </thead>
         <tbody>
@@ -142,21 +155,20 @@
                 <td>{{ attendance_record.emp_id }}</td>
                 <td>{{ attendance_record.present_days }}</td>
                 <td>{{ attendance_record.absent_days }}</td>
-                <!-- Include other data points based on your Attendance table -->
+                Include other data points based on your Attendance tabl
             </tr>
             {% endfor %}
         </tbody>
-    </table>
-    
-    <h2>Leave Table</h2>
-    <!-- Render Leave table data here -->
+    </table> -->
+    <!-- <h2>Leave Table</h2>
+    Render Leave table data her
     <table>
         <thead>
             <tr>
                 <th>Employee ID</th>
                 <th>Leave Type</th>
                 <th>Number of Days</th>
-                <!-- Include other table headers based on your Leave table -->
+                Include other table headers based on your Leave tabl
             </tr>
         </thead>
         <tbody>
@@ -165,12 +177,11 @@
                 <td>{{ leave_record.emp_id }}</td>
                 <td>{{ leave_record.leave_type }}</td>
                 <td>{{ leave_record.number_of_days }}</td>
-                <!-- Include other data points based on your Leave table -->
+                Include other data points based on your Leave tabl
             </tr>
             {% endfor %}
         </tbody>
-    </table>
-    
+    </table> -->
     <h2>Salary Calculation Table</h2>
     <!-- Render Salary Calculation table data here -->
     <table>
@@ -179,6 +190,10 @@
                 <th>Employee ID</th>
                 <th>HRA</th>
                 <th>DA</th>
+                <th>BA</th>
+                <th>TA</th>
+                <th>Incentive</th>
+                <th>Total Salary</th>
                 <!-- Include other table headers based on your Salary Calculation table -->
             </tr>
         </thead>
@@ -188,6 +203,10 @@
                 <td>{{ salary_record.emp_id }}</td>
                 <td>{{ salary_record.hra }}</td>
                 <td>{{ salary_record.da }}</td>
+                <td>{{ salary_record.ba }}</td>
+                <td>{{ salary_record.ta }}</td>
+                <td>{{ salary_record.incentive }}</td>
+                <td>{{ salary_record.total_salary }}</td>
                 <!-- Include other data points based on your Salary Calculation table -->
             </tr>
             {% endfor %}
@@ -202,6 +221,7 @@
                 <th>Employer ID</th>
                 <th>Designation</th>
                 <th>Department</th>
+                <th>Contact No</th>
                 <!-- Include other table headers based on your Pays table -->
             </tr>
         </thead>
@@ -211,6 +231,7 @@
                 <td>{{ employer_record.empl_id }}</td>
                 <td>{{ employer_record.empl_desg }}</td>
                 <td>{{ employer_record.empl_depart }}</td>
+                <td>{{ employer_record.empl_mob_no }}</td>
                 <!-- Include other data points based on your Pays table -->
             </tr>
             {% endfor %}
