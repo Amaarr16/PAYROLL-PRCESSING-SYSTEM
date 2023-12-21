@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Employee Login</title>
     <style>
@@ -75,15 +76,16 @@
         }
     </style>
 </head>
+
 <body>
     <nav>
         <a href="/">Home</a>
         <a href="/registration">Registration</a>
         <a href="/login">Login</a>
         {% if 'user_id' in session %}
-            <a href="/dashboard" class="{% if request.path == '/dashboard' %}active{% endif %}">Dashboard</a>
+        <a href="/dashboard" class="{% if request.path == '/dashboard' %}active{% endif %}">Dashboard</a>
         {% else %}
-            <a href="/dashboard">Dashboard</a>
+        <a href="/dashboard">Dashboard</a>
         {% endif %}
     </nav>
     <h1>Employee Login</h1>
@@ -95,7 +97,8 @@
         <input type="password" name="emp_password" required><br><br>
 
         <input type="submit" value="Login">
-        <p>FLASK_SECRET_KEY: {{ flask_secret_key }}</p>
+        <!-- <p>FLASK_SECRET_KEY: {{ flask_secret_key }}</p> -->
     </form>
 </body>
+
 </html>

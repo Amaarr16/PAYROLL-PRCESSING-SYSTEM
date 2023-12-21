@@ -69,15 +69,23 @@ def login():
         cursor = connection.cursor(dictionary=True)
         cursor.execute("SELECT * FROM Employee WHERE emp_email = %s", (emp_email,))
         user = cursor.fetchone()
+        
         if user and check_password_hash(user['emp_password'], emp_password):
             session['user_id'] = user['emp_id']
             if user['emp_designation'] == 'Admin':  # Assuming designation 'Admin' for admin users
                 return redirect(url_for('admin_dashboard'))
             else:
                 return redirect(url_for('dashboard'))
+        
         else:
             flash('Invalid email or password. Please try again.', 'error')
-    return render_template('login.html', flask_secret_key=os.environ.get('FLASK_SECRET_KEY'))
+    # Check if the user is already logged in
+    elif 'user_id' in session:
+        if session['user_id'] == 1:  # Replace '1' with the ID of your admin user
+            return redirect(url_for('admin_dashboard'))
+        else:
+            return redirect(url_for('dashboard'))
+    return render_template('login.html') #, flask_secret_key=os.environ.get('FLASK_SECRET_KEY'))
 
 # Function to get all employees for admin panel
 def get_all_employees():
