@@ -5,62 +5,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard</title>
-  <style>
-    /* Add CSS styles for your navigation bar here */
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f0f0f0;
-    }
-
-    nav {
-      background-color: #333;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      padding: 10px;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: #fff;
-      margin: 0 15px;
-      font-weight: bold;
-    }
-
-    .active {
-      text-decoration: underline;
-    }
-
-    p {
-      text-align: center;
-      margin: 20px 0;
-      color: #333;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    table th, table td {
-      border: 1px solid #ccc;
-      padding: 8px;
-      text-align: left;
-    }
-
-    table th {
-      background-color: #333;
-      color: #fff;
-    }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='dashboard-style.css') }}">
 </head>
 <body>
   <nav>
     <a href="/">Home</a>
-    <a href="/registration">Registration</a>
+    <!-- <a href="/registration">Registration</a> -->
     <a href="/login">Login</a>
     {% if 'user_id' in session %}
       <a href="/dashboard" class="{% if request.path == '/dashboard' %}active{% endif %}">Dashboard</a>

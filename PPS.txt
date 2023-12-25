@@ -1,5 +1,0 @@
-USE payroll_processing_system;
-INSERT INTO Attendance (a_id, emp_id, present_days, absent_days)VALUE(1, 1, 22, 2);
-INSERT INTO Employer (empl_desg, empl_mob_no, empl_depart)VALUE('Admin', '9999999999', 'Database Management');
-INSERT INTO SalaryCalculation (emp_id, empl_id, hra, ba, ta, incentive, da)VALUE(1, 1, 10000, 2000, 3000, 4000, 5000);
-INSERT INTO `Leave` (emp_id, leave_type, number_of_days)VALUE(1, 'Sick Leave', 3);

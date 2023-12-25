@@ -5,81 +5,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    <style>
-        /* Add your styles here */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-        }
-
-        nav {
-            background-color: #333;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 10px;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: #fff;
-            margin: 0 15px;
-            font-weight: bold;
-        }
-
-        .active {
-            text-decoration: underline;
-        }
-
-        h1,h2 {
-            text-align: center;
-            margin: 20px 0;
-            color: #333;
-        }
-
-        table {
-            width: 100%; /* Set the width to 100% */
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        table th,
-        table td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
-        }
-
-        table th {
-            background-color: #333;
-            color: #fff;
-        }
-
-        table td button {
-            background-color: #333;
-            color: #fff;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-
-        table td button:hover {
-            background-color: #555;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin-dashboard.css') }}">
 </head>
 <body>
     <nav>
         <a href="/">Home</a>
-        <a href="/registration">Registration</a>
+        <!-- <a href="/registration">Registration</a> -->
         <a href="/login">Login</a>
         {% if 'user_id' in session %}
-          <a href="/dashboard" class="{% if request.path == '/dashboard' %}active{% endif %}">Dashboard</a>
+            <div class="dropdown">
+                <a href="/dashboard" class="active">Dashboard</a>
+                <div class="dropdown-content">
+                    {% for employee in employees %}
+                        {% if employee.emp_designation == 'Admin' %}
+                        <a href="{{ url_for('add_new_employee') }}">Add New Employee</a>
+                        <a href="{{ url_for('update_attendance') }}">Update Attendance</a>
+                        <a href="{{ url_for('update_leave') }}">Update Leave</a>
+                        <a href="{{ url_for('add_new_employer') }}">Add New Employer</a>
+                        <a href="{{ url_for('prepare_monthly_salary') }}">Prepare Monthly Salary</a>
+                        {% else %}
+                            <!-- Other options based on different employee designations -->
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
         {% else %}
-          <a href="/dashboard">Dashboard</a>
+            <a href="/dashboard">Dashboard</a>
         {% endif %}
     </nav>
 <h1>Admin Dashboard</h1>
@@ -89,6 +41,7 @@
             <th>Employee ID</th>
             <th>Name</th>
             <th>Email</th>
+            <th>D.O.B</th>
             <th>Verification Status</th>
             <th>Action</th>
             <th>Present Days</th>
@@ -98,6 +51,8 @@
         </tr>
     </thead>
     <tbody>
+        <!-- {% if employees %} -->
+        <!-- <tr><td colspan="9">Employees data is available</td></tr> -->
         {% for employee in employees %}
         {% for attendance_record in attendance_data %}
         {% for leave_record in leave_data %}
@@ -107,10 +62,10 @@
             <td>{{ employee.emp_id }}</td>
             <td>{{ employee.f_name }} {{ employee.m_name }} {{ employee.l_name }}</td>
             <td>{{ employee.emp_email }}</td>
+            <td>{{ employee.emp_dob }}</td>
             <td>{{ employee.verification_status }}</td>
             <td>
-                <form method="post"
-                    action="{{ url_for('admin_update_verification', emp_id=employee['emp_id']) }}">
+                <form method="post" action="{{ url_for('admin_update_verification', emp_id=employee['emp_id']) }}">
                     <select name="verification_status">
                         <option value="Pending"
                             {% if employee['verification_status'] == 'Pending' %} selected {% endif %}>
@@ -138,6 +93,9 @@
         {% endfor %}
         {% endfor %}
         {% endfor %}
+        <!-- {% else %} -->
+        <!-- <tr><td colspan="9">No employee data available</td></tr> -->
+    <!-- {% endif %} -->
     </tbody>
 </table>
     <!-- <h2>Attendance Table</h2>
@@ -194,6 +152,7 @@
                 <th>TA</th>
                 <th>Incentive</th>
                 <th>Total Salary</th>
+                <th>Net Salary</th>
                 <!-- Include other table headers based on your Salary Calculation table -->
             </tr>
         </thead>
@@ -207,6 +166,7 @@
                 <td>{{ salary_record.ta }}</td>
                 <td>{{ salary_record.incentive }}</td>
                 <td>{{ salary_record.total_salary }}</td>
+                <td>{{ salary_record.net_salary }}</td>
                 <!-- Include other data points based on your Salary Calculation table -->
             </tr>
             {% endfor %}

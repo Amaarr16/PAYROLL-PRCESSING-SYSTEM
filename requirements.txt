@@ -1,6 +1,5 @@
 #This file specifies the exact versions of Flask, MySQL Connector, and Flask-Bcrypt that your project requires. 
-#You can use the 
-#"pip install -r requirements.txt" command to install all the dependencies listed in this file.
+#You can use the "pip install -r requirements.txt" command to install all the following dependencies listed in this file.
 Flask==2.1.1
 mysql-connector-python==8.0.27  # This is a MySQL connector for Python
 Werkzeug==2.1.2

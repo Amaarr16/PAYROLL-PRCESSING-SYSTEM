@@ -54,7 +54,7 @@ def create_employee_table_if_not_exists(app):
             emp_ver_id INT NOT NULL,
             emp_password VARCHAR(255) NOT NULL,
             verification_status ENUM('Pending', 'Verified', 'Rejected') NOT NULL,
-            oth_emp_id INT,
+            oth_emp_id INT DEFAULT '0',
             employer VARCHAR(255) NOT NULL
         )
         """)
@@ -63,7 +63,6 @@ def create_employee_table_if_not_exists(app):
         connection.close()
     except Exception as e:
         print(f"Error creating 'Employee' table: {e}")
-
 
 def create_attendance_table_if_not_exists(app):
     try:
@@ -138,6 +137,7 @@ def create_salary_calculation_table_if_not_exists(app):
             ta DECIMAL(10,2),
             incentive DECIMAL(10,2),
             total_salary DECIMAL(10,2),
+            net_salary DECIMAL(10,2),
             FOREIGN KEY (emp_id) REFERENCES Employee(emp_id),
             FOREIGN KEY (empl_id) REFERENCES Employer(empl_id)
         )
