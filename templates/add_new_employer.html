@@ -13,23 +13,16 @@
 <body>
     <nav>
         <a href="/">Home</a>
-        <!-- <a href="/registration">Registration</a> -->
         <a href="/login">Login</a>
         {% if 'user_id' in session %}
             <div class="dropdown">
                 <a href="/dashboard" class="active">Dashboard</a>
                 <div class="dropdown-content">
-                    {% for employee in employees %}
-                        {% if employee.emp_designation == 'Admin' %}
                         <a href="{{ url_for('add_new_employee') }}">Add New Employee</a>
                         <a href="{{ url_for('update_attendance') }}">Update Attendance</a>
                         <a href="{{ url_for('update_leave') }}">Update Leave</a>
                         <a href="{{ url_for('add_new_employer') }}">Add New Employer</a>
                         <a href="{{ url_for('prepare_monthly_salary') }}">Prepare Monthly Salary</a>
-                        {% else %}
-                            <!-- Other options based on different employee designations -->
-                        {% endif %}
-                    {% endfor %}
                 </div>
             </div>
         {% else %}
@@ -43,13 +36,10 @@
         <input type="text" id="emp_id" name="emp_id" required>
         <label for="empl_desg">Designation:</label>
         <input type="text" name="empl_desg" required>
-
         <label for="empl_mob_no">Mobile Number:</label>
         <input type="text" name="empl_mob_no" required>
-        
         <label for="empl_depart">Department:</label>
         <input type="text" name="empl_depart" required>
-
         <button type="submit">Submit</button>
     </form>
 </body>

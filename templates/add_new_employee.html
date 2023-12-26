@@ -13,27 +13,20 @@
 <body>
     <nav>
         <a href="/">Home</a>
-        <!-- <a href="/registration">Registration</a> -->
         <a href="/login">Login</a>
         {% if 'user_id' in session %}
-            <div class="dropdown">
-                <a href="/dashboard" class="active">Dashboard</a>
-                <div class="dropdown-content">
-                    {% for employee in employees %}
-                        {% if employee.emp_designation == 'Admin' %}
-                        <a href="{{ url_for('add_new_employee') }}">Add New Employee</a>
-                        <a href="{{ url_for('update_attendance') }}">Update Attendance</a>
-                        <a href="{{ url_for('update_leave') }}">Update Leave</a>
-                        <a href="{{ url_for('add_new_employer') }}">Add New Employer</a>
-                        <a href="{{ url_for('prepare_monthly_salary') }}">Prepare Monthly Salary</a>
-                        {% else %}
-                            <!-- Other options based on different employee designations -->
-                        {% endif %}
-                    {% endfor %}
-                </div>
+        <div class="dropdown">
+            <a href="/dashboard" class="active">Dashboard</a>
+            <div class="dropdown-content">
+                <a href="{{ url_for('add_new_employee') }}">Add New Employee</a>
+                <a href="{{ url_for('update_attendance') }}">Update Attendance</a>
+                <a href="{{ url_for('update_leave') }}">Update Leave</a>
+                <a href="{{ url_for('add_new_employer') }}">Add New Employer</a>
+                <a href="{{ url_for('prepare_monthly_salary') }}">Prepare Monthly Salary</a>
             </div>
+        </div>
         {% else %}
-            <a href="/dashboard">Dashboard</a>
+        <a href="/dashboard">Dashboard</a>
         {% endif %}
     </nav>
     <h1>Add New Employee</h1>
@@ -46,7 +39,7 @@
         <label for="l_name">Last Name:</label>
         <input type="text" name="l_name" id="emp_name" required>
         <label for="emp_desig">Designation:</label>
-        <input type="text" name="emp_desig" required >
+        <input type="text" name="emp_desig" required>
         <label for="emp_dob">Date of Birth:</label>
         <input type="date" name="emp_dob" required>
         <label for="emp_mobile_no">Mobile Number:</label>
@@ -54,17 +47,17 @@
         <label for="emp_email">Email:</label>
         <input type="email" name="emp_email" required>
         <label for="acc_name">Account Name:</label>
-        <input type="text" name="acc_name" id="acc_name" required >
+        <input type="text" name="acc_name" id="acc_name" required>
         <label for="acc_number">Account No:</label>
-        <input type="text" name="acc_number" id="acc_number" required >
+        <input type="text" name="acc_number" id="acc_number" required>
         <label for="ifsc_code">IFSC Code:</label>
-        <input type="text" name="ifsc_code" id="ifsc_code" required >
+        <input type="text" name="ifsc_code" id="ifsc_code" required>
         <label for="emp_ver_id">Identification Proof (e.g., Aadhaar Card No):</label>
-        <input type="text" name="emp_ver_id" required >
+        <input type="text" name="emp_ver_id" required>
         <label for="oth_emp_id">Department Head ID:</label>
-        <input type="text" name="oth_emp_id" required  >
+        <input type="text" name="oth_emp_id" required>
         <label for="emp_password">Password:</label>
-        <input type="password" name="emp_password" required >
+        <input type="password" name="emp_password" required>
         <button type="submit">Submit</button>
     </form>
 </body>

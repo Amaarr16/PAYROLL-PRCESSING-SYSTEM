@@ -11,3 +11,4 @@
 - Copy the generated key.
 
 - Open your .env file, and set the FLASK_SECRET_KEY to the copied key:
+ v cz.;,m  nbvgcfdxsza

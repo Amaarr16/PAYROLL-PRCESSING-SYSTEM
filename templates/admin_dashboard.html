@@ -11,137 +11,87 @@
 <body>
     <nav>
         <a href="/">Home</a>
-        <!-- <a href="/registration">Registration</a> -->
         <a href="/login">Login</a>
         {% if 'user_id' in session %}
-            <div class="dropdown">
-                <a href="/dashboard" class="active">Dashboard</a>
-                <div class="dropdown-content">
-                    {% for employee in employees %}
-                        {% if employee.emp_designation == 'Admin' %}
-                        <a href="{{ url_for('add_new_employee') }}">Add New Employee</a>
-                        <a href="{{ url_for('update_attendance') }}">Update Attendance</a>
-                        <a href="{{ url_for('update_leave') }}">Update Leave</a>
-                        <a href="{{ url_for('add_new_employer') }}">Add New Employer</a>
-                        <a href="{{ url_for('prepare_monthly_salary') }}">Prepare Monthly Salary</a>
-                        {% else %}
-                            <!-- Other options based on different employee designations -->
-                        {% endif %}
-                    {% endfor %}
-                </div>
+        <div class="dropdown">
+            <a href="/dashboard" class="active">Dashboard</a>
+            <div class="dropdown-content">
+                <a href="{{ url_for('add_new_employee') }}">Add New Employee</a>
+                <a href="{{ url_for('update_attendance') }}">Update Attendance</a>
+                <a href="{{ url_for('update_leave') }}">Update Leave</a>
+                <a href="{{ url_for('add_new_employer') }}">Add New Employer</a>
+                <a href="{{ url_for('prepare_monthly_salary') }}">Prepare Monthly Salary</a>
             </div>
+        </div>
         {% else %}
-            <a href="/dashboard">Dashboard</a>
+        <a href="/dashboard">Dashboard</a>
         {% endif %}
     </nav>
-<h1>Admin Dashboard</h1>
-<table>
-    <thead>
-        <tr>
-            <th>Employee ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>D.O.B</th>
-            <th>Verification Status</th>
-            <th>Action</th>
-            <th>Present Days</th>
-            <th>Absent Days</th>
-            <th>Leave Type</th>
-            <th>Number of Days</th>
-        </tr>
-    </thead>
-    <tbody>
-        <!-- {% if employees %} -->
-        <!-- <tr><td colspan="9">Employees data is available</td></tr> -->
-        {% for employee in employees %}
-        {% for attendance_record in attendance_data %}
-        {% for leave_record in leave_data %}
-        {% if employee.emp_id == attendance_record.emp_id %}
-        {% if employee.emp_id == leave_record.emp_id %}
-        <tr>
-            <td>{{ employee.emp_id }}</td>
-            <td>{{ employee.f_name }} {{ employee.m_name }} {{ employee.l_name }}</td>
-            <td>{{ employee.emp_email }}</td>
-            <td>{{ employee.emp_dob }}</td>
-            <td>{{ employee.verification_status }}</td>
-            <td>
-                <form method="post" action="{{ url_for('admin_update_verification', emp_id=employee['emp_id']) }}">
-                    <select name="verification_status">
-                        <option value="Pending"
-                            {% if employee['verification_status'] == 'Pending' %} selected {% endif %}>
-                            Pending
-                        </option>
-                        <option value="Verified"
-                            {% if employee['verification_status'] == 'Verified' %} selected {% endif %}>
-                            Verified
-                        </option>
-                        <option value="Rejected"
-                            {% if employee['verification_status'] == 'Rejected' %} selected {% endif %}>
-                            Rejected
-                        </option>
-                    </select>
-                    <button type="submit">Update</button>
-                </form>
-            </td>
-            <td>{{ attendance_record.present_days }}</td>
-            <td>{{ attendance_record.absent_days }}</td>
-            <td>{{ leave_record.leave_type }}</td>
-            <td>{{ leave_record.number_of_days }}</td>
-        </tr>
-        {% endif %}
-        {% endif %}
-        {% endfor %}
-        {% endfor %}
-        {% endfor %}
-        <!-- {% else %} -->
-        <!-- <tr><td colspan="9">No employee data available</td></tr> -->
-    <!-- {% endif %} -->
-    </tbody>
-</table>
-    <!-- <h2>Attendance Table</h2>
-    Render Attendance table data here
+    <h1>Admin Dashboard</h1>
     <table>
         <thead>
             <tr>
                 <th>Employee ID</th>
-                Include other table headers based on your Attendance tabl
-            </tr>
-        </thead>
-        <tbody>
-            {% for attendance_record in attendance_data %}
-            <tr>
-                <td>{{ attendance_record.emp_id }}</td>
-                <td>{{ attendance_record.present_days }}</td>
-                <td>{{ attendance_record.absent_days }}</td>
-                Include other data points based on your Attendance tabl
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table> -->
-    <!-- <h2>Leave Table</h2>
-    Render Leave table data her
-    <table>
-        <thead>
-            <tr>
-                <th>Employee ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>D.O.B</th>
+                <th>Verification Status</th>
+                <th>Action</th>
+                <th>Present Days</th>
+                <th>Absent Days</th>
                 <th>Leave Type</th>
                 <th>Number of Days</th>
-                Include other table headers based on your Leave tabl
             </tr>
         </thead>
         <tbody>
+            <!-- {% if employees %} -->
+            <!-- <tr><td colspan="9">Employees data is available</td></tr> -->
+            {% for employee in employees %}
+            {% for attendance_record in attendance_data %}
             {% for leave_record in leave_data %}
+            {% if employee.emp_id == attendance_record.emp_id %}
+            {% if employee.emp_id == leave_record.emp_id %}
             <tr>
-                <td>{{ leave_record.emp_id }}</td>
+                <td>{{ employee.emp_id }}</td>
+                <td>{{ employee.f_name }} {{ employee.m_name }} {{ employee.l_name }}</td>
+                <td>{{ employee.emp_email }}</td>
+                <td>{{ employee.emp_dob }}</td>
+                <td>{{ employee.verification_status }}</td>
+                <td>
+                    <form method="post" action="{{ url_for('admin_update_verification', emp_id=employee['emp_id']) }}">
+                        <select name="verification_status">
+                            <option value="Pending" {% if employee['verification_status']=='Pending' %} selected {%
+                                endif %}>
+                                Pending
+                            </option>
+                            <option value="Verified" {% if employee['verification_status']=='Verified' %} selected {%
+                                endif %}>
+                                Verified
+                            </option>
+                            <option value="Rejected" {% if employee['verification_status']=='Rejected' %} selected {%
+                                endif %}>
+                                Rejected
+                            </option>
+                        </select>
+                        <button type="submit">Update</button>
+                    </form>
+                </td>
+                <td>{{ attendance_record.present_days }}</td>
+                <td>{{ attendance_record.absent_days }}</td>
                 <td>{{ leave_record.leave_type }}</td>
                 <td>{{ leave_record.number_of_days }}</td>
-                Include other data points based on your Leave tabl
             </tr>
+            {% endif %}
+            {% endif %}
             {% endfor %}
+            {% endfor %}
+            {% endfor %}
+            <!-- {% else %} -->
+            <!-- <tr><td colspan="9">No employee data available</td></tr> -->
+            <!-- {% endif %} -->
         </tbody>
-    </table> -->
+    </table>
     <h2>Salary Calculation Table</h2>
-    <!-- Render Salary Calculation table data here -->
     <table>
         <thead>
             <tr>
@@ -172,9 +122,7 @@
             {% endfor %}
         </tbody>
     </table>
-    
     <h2>Employer Table</h2>
-    <!-- Render Pays table data here -->
     <table>
         <thead>
             <tr>
@@ -197,7 +145,6 @@
             {% endfor %}
         </tbody>
     </table>
-
     <br /><br />
     <button><a href="{{ url_for('logout') }}">Logout</a></button>
 </body>

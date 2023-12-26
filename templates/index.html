@@ -4,21 +4,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin-dashboard.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='index-style.css') }}">
-    </head>
-    <body>
-      <nav>
+</head>
+<body>
+    <nav>
         <a href="/">Home</a>
-        <!-- <a href="/registration">Registration</a> -->
         <a href="/login">Login</a>
         {% if 'user_id' in session %}
-          <a href="/dashboard" class="active">Dashboard</a>
+        <a href="/dashboard" class="active">Dashboard</a>
         {% else %}
-          <a href="/dashboard">Dashboard</a>
+        <a href="/dashboard">Dashboard</a>
         {% endif %}
-      </nav>
+    </nav>
+    <h1>Payroll Processing System</h1>
 </body>
 </html>
-
-

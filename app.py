@@ -17,12 +17,10 @@ app.config['MYSQL_DB'] = os.environ.get('MYSQL_DB', 'payroll_processing_system')
 with app.app_context():
     create_all_tables(app)
 
-#FUNCTION FOR INDEX PAGE
 @app.route('/')
 def index():
     return render_template('index.html')
 
-#FUNCTION FOR LOGIN PAGE
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -32,7 +30,6 @@ def login():
         cursor = connection.cursor(dictionary=True)
         cursor.execute("SELECT * FROM Employee WHERE emp_email = %s", (emp_email,))
         user = cursor.fetchone()
-        
         if user and check_password_hash(user['emp_password'], emp_password):
             session['user_id'] = user['emp_id']
             if user['emp_designation'] == 'Admin':  # Assuming designation 'Admin' for admin users
@@ -50,7 +47,6 @@ def login():
             return redirect(url_for('dashboard'))
     return render_template('login.html') #, flask_secret_key=os.environ.get('FLASK_SECRET_KEY'))
 
-# Admin dashboard route
 @app.route('/admin_dashboard')
 def admin_dashboard():
     if 'user_id' in session and session['user_id'] == 1:  # Replace '1' with the ID of your admin user
@@ -83,7 +79,6 @@ def admin_update_verification(emp_id):
 def add_new_employee():
     if 'user_id' not in session or session['user_id'] != 1:
         abort(403)
-
     if request.method == 'POST':
         try:
             # Retrieve form data
@@ -136,19 +131,15 @@ def add_new_employee():
                     INSERT INTO Employee (f_name, m_name, l_name, emp_designation, emp_dob, emp_mobile_no, emp_email, acc_name, acc_number, ifsc_code, emp_ver_id, emp_password, verification_status, oth_emp_id, employer) 
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """, (f_name, m_name, l_name, emp_designation, formatted_dob, emp_mobile_no, emp_email, acc_name, acc_number, ifsc_code, emp_ver_id, emp_password, 'Pending', oth_emp_id_value, 'Payroll Processing System'))
-
             connection.commit()
             cursor.close()
             connection.close()
-
             return redirect(url_for('admin_dashboard'))
         except Exception as e:
             flash(f'An error occurred while adding a new employee: {e}')
             return redirect(url_for('error_page'))
     else:
-        all_data=fetch_all_data(app)
-        return render_template('add_new_employee.html', employees=all_data['employee_data'])
-
+        return render_template('add_new_employee.html')
 
 @app.route('/update_attendance', methods=['GET', 'POST'])
 def update_attendance():
@@ -190,10 +181,8 @@ def update_attendance():
             return redirect(url_for('error_page'))
     except Exception as e:
         # Log the exception or handle it as needed
-        print(f"An error occurred: {e}")    
-    # This line will be reached even if an exception occurs
-    all_data=fetch_all_data(app)
-    return render_template('update_attendance.html', employees=all_data['employee_data'])
+        print(f"An error occurred: {e}")
+    return render_template('update_attendance.html')
 
 @app.route('/update_leave', methods=['GET', 'POST'])
 def update_leave():
@@ -205,14 +194,11 @@ def update_leave():
             emp_id = request.form.get('emp_id')
             leave_type = request.form.get('leave_type')
             number_of_days = request.form.get('number_of_days')
-
             connection = get_mysql_connection(app)
             cursor = connection.cursor()
-
             # Check if there is an existing record for the emp_id
             cursor.execute("SELECT * FROM `Leave` WHERE emp_id = %s", (emp_id,))
             existing_record = cursor.fetchone()
-
             if existing_record:
                 # Update the existing record
                 cursor.execute("""
@@ -227,7 +213,6 @@ def update_leave():
                     INSERT INTO `Leave` (emp_id, leave_type, number_of_days)
                     VALUES (%s, %s, %s)
                 """, (emp_id, leave_type, number_of_days))
-
             connection.commit()
             cursor.close()
             connection.close()            
@@ -239,8 +224,7 @@ def update_leave():
     except Exception as e:
         # Log the exception or handle it as needed
         print(f"An error occurred: {e}")
-    all_data=fetch_all_data(app)
-    return render_template('update_leave.html', employees=all_data['employee_data'])
+    return render_template('update_leave.html')
 
 @app.route('/add_new_employer', methods=['GET', 'POST'])
 def add_new_employer():
@@ -253,10 +237,8 @@ def add_new_employer():
             empl_desg = request.form.get('empl_desg')
             empl_mob_no = request.form.get('empl_mob_no')
             empl_depart = request.form.get('empl_depart')
-            
             connection = get_mysql_connection(app)
             cursor = connection.cursor(dictionary=True)
-
             # Check if there is an existing record for the emp_id in the Employee table
             cursor.execute("SELECT * FROM Employee WHERE emp_id = %s", (emp_id,))
             existing_employee_record = cursor.fetchone()
@@ -265,7 +247,6 @@ def add_new_employer():
                 # Fetch the empl_id from the Employer table for the given empl_id
                 cursor.execute("SELECT * FROM Employer WHERE empl_id = %s", (empl_id,))
                 existing_employer_record = cursor.fetchone()
-
                 if existing_employer_record:
                     # Update the existing record in the Employer table
                     cursor.execute("""
@@ -281,27 +262,21 @@ def add_new_employer():
                         INSERT INTO Employer (empl_desg, empl_mob_no, empl_depart)
                         VALUES (%s, %s, %s)
                     """, (empl_desg, empl_mob_no, empl_depart))
-
                 connection.commit()
                 cursor.close()
                 connection.close()
                 # Redirect to the admin dashboard or another appropriate page
                 return redirect(url_for('admin_dashboard'))
-
             else:
                 # Handle the case where no existing record is found in the Employee table
                 return redirect(url_for('error_page'))
-
         else:
             # Handle other cases or redirect to an error page
             return redirect(url_for('error_page'))
-
     except Exception as e:
         # Log the exception or handle it as needed
         print(f"An error occurred: {e}")
-    
-    all_data=fetch_all_data(app)
-    return render_template('add_new_employer.html', employees=all_data['employee_data'])
+    return render_template('add_new_employer.html')
 
 @app.route('/prepare_monthly_salary', methods=['GET', 'POST'])
 def prepare_monthly_salary():
@@ -322,14 +297,11 @@ def prepare_monthly_salary():
             total_salary = hra + da + ba + ta + incentive
             # Calculate salary based on attendance and leave data
             salary = calculate_salary(emp_id, total_salary)
-
             connection = get_mysql_connection(app)
             cursor = connection.cursor(dictionary=True)
-
             # Check if there is an existing record for the emp_id in the SalaryCalculation table
             cursor.execute("SELECT * FROM SalaryCalculation WHERE emp_id = %s", (emp_id,))
             existing_salary_record = cursor.fetchone()
-
             # Fetch the empl_id and oth_emp_id from the Employee table for the given emp_id
             cursor.execute("SELECT * FROM Employee WHERE emp_id = %s", (emp_id,))
             employee_data = cursor.fetchone()
@@ -354,27 +326,21 @@ def prepare_monthly_salary():
                         INSERT INTO SalaryCalculation (emp_id, empl_id, hra, da, ba, ta, incentive, total_salary,net_salary)
                         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                     """, (emp_id, empl_id, hra, da, ba, ta, incentive, total_salary,salary))
-
                 connection.commit()
                 cursor.close()
                 connection.close()
                 # Redirect to the admin dashboard or another appropriate page
                 return redirect(url_for('admin_dashboard'))
-
             else:
                 # Handle the case where no existing record is found in the Employee table
                 return redirect(url_for('error_page'))
-
         else:
             # Handle other cases or redirect to an error page
             return redirect(url_for('error_page'))
-
     except Exception as e:
         # Log the exception or handle it as needed
         print(f"An error occurred: {e}")
-
-    all_data=fetch_all_data(app)
-    return render_template('prepare_monthly_salary.html', employees=all_data['employee_data'])
+    return render_template('prepare_monthly_salary.html')
 
 def calculate_salary(emp_id, total_salary):
     connection = get_mysql_connection(app)
@@ -404,7 +370,6 @@ def calculate_salary(emp_id, total_salary):
     connection.close()
     return net_salary
 
-#FUNCTION FOR DASHBORD PAGE
 @app.route('/dashboard') 
 def dashboard():
     if 'user_id' in session:
@@ -425,7 +390,6 @@ def dashboard():
     else:
         return redirect(url_for('login'))
 
-#FUNCTION FOR LOGOUT PAGE
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)  # Remove the user_id from the session

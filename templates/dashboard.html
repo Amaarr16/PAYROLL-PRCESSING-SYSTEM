@@ -6,44 +6,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin-dashboard.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='dashboard-style.css') }}">
 </head>
 <body>
   <nav>
     <a href="/">Home</a>
-    <!-- <a href="/registration">Registration</a> -->
     <a href="/login">Login</a>
     {% if 'user_id' in session %}
-      <a href="/dashboard" class="{% if request.path == '/dashboard' %}active{% endif %}">Dashboard</a>
+    <a href="/dashboard" class="active">Dashboard</a>
     {% else %}
-      <a href="/dashboard">Dashboard</a>
+    <a href="/dashboard">Dashboard</a>
     {% endif %}
   </nav>
   {% if 'user_id' in session %}
-    <p>
-      Hi, {{ employee.emp_name }}, welcome to the dashboard.
-    </p>
-
-    <table>
-      <tr>
-        <th>Employee Name</th>
-        <th>Employer Name</th>
-        <th>Verification Status</th>
-        <!--<th>Employer Logo</th>-->
-      </tr>
-      <tr>
-        <td>{{ employee.f_name }} {{ employee.m_name }} {{ employee.l_name }}</td>
-        <td>{{ employee.employer }}</td>
-        <td>{{ employee.verification_status }}</td>
-        <!--<td><img src="{{ employee.employer_logo_url }}" alt="{{ employee.employer }} Logo"></td>-->
-      </tr>
-    </table>
-    <br><br>
-    <a href="{{ url_for('logout') }}">Logout</a>
+  <p>
+    Hi, {{ employee.emp_name }}, welcome to the dashboard.
+  </p>
+  <table>
+    <tr>
+      <th>Employee Name</th>
+      <th>Employer Name</th>
+      <th>Verification Status</th>
+    </tr>
+    <tr>
+      <td>{{ employee.f_name }} {{ employee.m_name }} {{ employee.l_name }}</td>
+      <td>{{ employee.employer }}</td>
+      <td>{{ employee.verification_status }}</td>
+    </tr>
+  </table>
+  <br><br>
+  <a href="{{ url_for('logout') }}">Logout</a>
   {% else %}
-    <p>
-      Hi, please log in to access the dashboard.
-    </p>
+  <p>
+    Hi, please log in to access the dashboard.
+  </p>
   {% endif %}
 </body>
 </html>
